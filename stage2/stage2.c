@@ -682,7 +682,8 @@ restart1:
 	    grub_putchar (DISP_HORIZ, 255);
 
 	  /* upper-right corner */
-	  grub_putchar (DISP_UR, 255);
+	 // grub_putchar (DISP_UR, 255);
+		  grub_putchar (DISP_UL, 255);
 
 	  for (i = 0; i < MENU_BOX_H; i++)
 	    {
