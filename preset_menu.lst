@@ -2,6 +2,7 @@
 configfile
 default 0
 timeout 10
+splashimage=/grub/splash.xpm.gz
 
 title Test
 	commandline
