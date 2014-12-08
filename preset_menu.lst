@@ -4,6 +4,7 @@ default 0
 timeout 10
 
 title Test
+	commandline
    
 
 title find /menu.lst, /boot/grub/menu.lst, /grub/menu.lst
