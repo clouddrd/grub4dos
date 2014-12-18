@@ -111,6 +111,9 @@ struct term_entry term_table[] =
 
 int count_lines = -1;
 int use_pager = 1;
+
+extern int rz_grub_menu_hidden;
+
 void
 print_error (void)
 {
@@ -602,8 +605,10 @@ init_page (void)
 {
   cls ();
 
+  if(!rz_grub_menu_hidden)
   grub_printf ("GNU GRUB  version %s  (%dK lower / %dK upper memory)\n",
 	  version_string, saved_mem_lower, saved_mem_upper);
+
 }
 
 #endif

@@ -1,32 +1,14 @@
 #pxe detect
 configfile
 default 0
-timeout 10
-splashimage=/grub/splash.xpm.gz
+timeout 600
+#splashimage=/grub/splash.xpm.gz
+splashimage=/grub/splash.bmp
 
 
-title Test
+title Test1
 	commandline
    
-
-title find /menu.lst, /boot/grub/menu.lst, /grub/menu.lst
-	errorcheck off
-	configfile /boot/grub/menu.lst
-	configfile /grub/menu.lst
-	if "%@root%"=="(ud)" && calc *0x82A0=*0x82b9&0xff
-	if "%@root:~1,1%"=="f" && find --set-root --devices=f /menu.lst && configfile /menu.lst
-	find --set-root --ignore-floppies --ignore-cd /menu.lst && configfile /menu.lst
-	find --set-root --ignore-floppies --ignore-cd /boot/grub/menu.lst && configfile /boot/grub/menu.lst
-	find --set-root --ignore-floppies --ignore-cd /grub/menu.lst && configfile /grub/menu.lst
-	errorcheck on
+title Test2
 	commandline
-
-title commandline
-	commandline
-
-title reboot
-	reboot
-
-title halt
-	halt
-
+	
