@@ -27,6 +27,8 @@ unsigned long is_highlight = 0;
 #define	preset_menu *(const char **)0x307FFC
 
 static unsigned long preset_menu_offset;
+int rz_grub_menu_hidden=1;
+
 
 static int
 open_preset_menu (void)
@@ -336,7 +338,8 @@ print_entry (int y, int highlight,int entryno, char *config_entries)
 	}
 	else if (default_help_message_destoyed)
 	{
-		print_default_help_message (config_entries);
+		if(!rz_grub_menu_hidden)
+			print_default_help_message (config_entries);
 	}
 	gotoxy (MENU_BOX_E, y);
   }
@@ -645,6 +648,9 @@ restart1:
   /* Only display the menu if the user wants to see it. */
   if (show_menu)
     {
+	  //@add
+	  int ur_corner=DISP_UR;
+
       init_page ();
       //setcursor (0);
 
@@ -654,6 +660,7 @@ restart1:
       #ifdef SUPPORT_GRAPHICS
 	if (graphics_inited && graphics_mode > 0xff)/*vbe mode call rectangle_func*/
 	{
+		ur_corner=DISP_UL;
 		if (current_term->setcolorstate)
 			current_term->setcolorstate (COLOR_STATE_BORDER);
 		unsigned long x,y,w,h,i,j;
@@ -682,8 +689,8 @@ restart1:
 	    grub_putchar (DISP_HORIZ, 255);
 
 	  /* upper-right corner */
-	 // grub_putchar (DISP_UR, 255);
-		  grub_putchar (DISP_UL, 255);
+	 //@RZ grub_putchar (DISP_UR, 255);
+		  grub_putchar (ur_corner, 255);
 
 	  for (i = 0; i < MENU_BOX_H; i++)
 	    {
@@ -713,12 +720,13 @@ restart1:
       if (current_term->setcolorstate)
 	  current_term->setcolorstate (COLOR_STATE_HELPTEXT);
 
-      print_default_help_message (config_entries);
+      if(!rz_grub_menu_hidden)
+    	  print_default_help_message (config_entries);
 
       if (current_term->flags & TERM_DUMB)
-	grub_printf ("\n\nThe selected entry is %d ", entryno);
+    	  grub_printf ("\n\nThe selected entry is %d ", entryno);
       else
-	print_entries (first_entry, entryno, menu_entries);
+    	  print_entries (first_entry, entryno, menu_entries);
     }
    if (menu_init_script_file[0] != 0 )	command_func(menu_init_script_file,BUILTIN_MENU);
   /* XX using RT clock now, need to initialize value */
@@ -1067,8 +1075,9 @@ done_key_handling:
 
 	  if (debug > 0)
 	  {
-		gotoxy (MENU_BOX_E - 4, MENU_BOX_Y - 2);
-		grub_printf ("%3d ", (first_entry + entryno));
+		  //@RZ
+		//gotoxy (MENU_BOX_E - 4, MENU_BOX_Y - 2);
+		//grub_printf ("%3d ", (first_entry + entryno));
 	  }
 	  gotoxy (MENU_BOX_E, MENU_BOX_Y + entryno);
 
