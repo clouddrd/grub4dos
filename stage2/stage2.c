@@ -670,7 +670,7 @@ restart1:
 		y = (MENU_BOX_Y)*j-(j>>1);
 		w = (MENU_BOX_W + 2) * i;
 		h = (MENU_BOX_H + 1) * j;
-		rectangle(x,y,w,h,menu_border.border_w);
+		//@ rectangle(x,y,w,h,menu_border.border_w);
 	}
 	else
 	#endif
