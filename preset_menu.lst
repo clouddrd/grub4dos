@@ -1,7 +1,7 @@
 #pxe detect
 configfile
 default 0
-timeout 600
+timeout -1
 #splashimage=/grub/splash.xpm.gz
 splashimage=/grub/splash.bmp
 

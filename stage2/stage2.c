@@ -28,7 +28,7 @@ unsigned long is_highlight = 0;
 
 static unsigned long preset_menu_offset;
 int rz_grub_menu_hidden=1;
-
+int rz_grub_menu_config=1;
 
 static int
 open_preset_menu (void)
@@ -2058,6 +2058,15 @@ reset (void)
   menu_num_ctrl[0] = 0;
 }
 
+void rz_read_default_menu(void)
+{
+
+	//grub_open("(hd0,0)/iboot.ini");
+
+	//grub_close();
+}
+
+
 extern struct builtin builtin_title;
 extern struct builtin builtin_graphicsmode;
 extern struct builtin builtin_debug;
@@ -2098,6 +2107,8 @@ restart_config:
 	{
 	    int is_opened;
 
+	    if(rz_grub_menu_config)
+	    	rz_read_default_menu();
 	    is_preset = is_opened = 0;
 	    /* Try command-line menu first if it is specified. */
 	    //if (preset_menu == (char *)0x0800/*&& ! *config_file*/)
