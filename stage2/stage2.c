@@ -2143,7 +2143,7 @@ restart_config:
 	    			printf("goto entry");
 	    			cur_entry=get_entry(menu_cfg,1);
 	    			//entryno=0;
-	    			goto boot_entry;
+	    			//goto boot_entry;
 	    		}
 	    	}
 	    }
