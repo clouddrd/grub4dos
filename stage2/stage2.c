@@ -2084,7 +2084,7 @@ static void rz_read_default_menu(void)
 	if(rz_grub_menu_debug[8]=='a') rz_grub_menu_index=0;
 	else if(rz_grub_menu_debug[8]=='m') rz_grub_menu_index=1;
 
-	grub_timeout=0;
+	if(rz_grub_menu_index>=0) grub_timeout=0;
 
 }
 
