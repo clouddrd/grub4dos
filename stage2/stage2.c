@@ -2137,15 +2137,6 @@ restart_config:
 	    if (use_preset_menu)
 	    {
 	    	is_opened = is_preset = open_preset_menu ();
-	    	if(rz_grub_menu_config)  {
-	    		rz_read_default_menu();
-	    		if(rz_grub_menu_index>=0){
-	    			printf("goto entry");
-	    			cur_entry=get_entry(menu_cfg,1);
-	    			//entryno=0;
-	    			//goto boot_entry;
-	    		}
-	    	}
 	    }
 	    if (! is_opened)
 	    {
@@ -2591,6 +2582,16 @@ original_config:
     }
 
 done_config_file:
+
+	//@ADD
+	if(rz_grub_menu_config)  {
+		rz_read_default_menu();
+		if(rz_grub_menu_index>=0){
+			printf("goto entry\n");
+			cur_entry=get_entry(menu_cfg,1);
+			//entryno=0;
+		}
+	}
 
 	use_preset_menu = 0;	/* Disable the preset menu.  */
 
