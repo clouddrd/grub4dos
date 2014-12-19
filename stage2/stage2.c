@@ -2063,7 +2063,7 @@ reset (void)
 static void rz_read_default_menu(void)
 {
 	int ret=0;
-	ret=grub_open("iboot.ini");
+	ret=grub_open("/iboot.ini");
 	if(!ret) printf("open:%d\n",ret);
 	else printf("error open:%d\n",ret);
 
