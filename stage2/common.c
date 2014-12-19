@@ -268,7 +268,7 @@ void *grub_malloc(unsigned long size)
 {
 	struct malloc_array *p_memalloc_array = malloc_array_start;
 	unsigned long alloc_mem = 0;
-	size = (size + 0x1F) & ~0xf; //分配内存,16字节对齐,额外分配16字节.也就是说最少的内存分配是32字节.
+	size = (size + 0x1F) & ~0xf; //�늽�뀓�냵耶�,16耶쀨뒄野백퐧,窯앭쨼�늽�뀓16耶쀨뒄.阿잌갚�삸瑥닸�弱묊쉪�냵耶섇늽�뀓�삸32耶쀨뒄.
 
 	for ( ; p_memalloc_array->addr != free_mem_end; p_memalloc_array = p_memalloc_array->next)//find free mem array;
 	{
@@ -320,7 +320,7 @@ void grub_free(void *ptr)
 			P->addr &= ~0xfUL;//unused memory
 
 			if (P1 != P && (P1->addr & 1) == 0)
-			{//向前合并可用内存块.
+			{//�릲�뎺�릦亮뜹룾�뵪�냵耶섇쓼.
 				P1->next = P->next;
 				P->addr = 0;
 				P = P1;
@@ -328,7 +328,7 @@ void grub_free(void *ptr)
 
 			P1 = P->next;
 			if (P1->addr != free_mem_end && (P1->addr & 1) == 0)
-			{//向后合并可用内存块.
+			{//�릲�릮�릦亮뜹룾�뵪�냵耶섇쓼.
 				P1->addr = 0;
 				P->next = P1->next;
 			}
@@ -529,7 +529,7 @@ init_bios_info (void)
     }
 
 #ifdef FSYS_PXE
-    if (! ((*(char *)0x8205) & 0x01))	/* if it is not disable pxe */
+    if (! ((*(char *)0x8205) & 0x01) && 0 )	/* if it is not disable pxe */
     {
 	//pxe_detect();
 	if (! pxe_entry)
