@@ -2064,7 +2064,7 @@ static void rz_read_default_menu(void)
 {
 	int ret=0;
 	ret=grub_open("/iboot.ini");
-	if(ret)	{
+	if(!ret)	{
 		printf("error open:%d\n",ret);
 		return;
 	}
@@ -2072,7 +2072,7 @@ static void rz_read_default_menu(void)
 
 
 	ret = grub_read(rz_grub_menu_debug,100,0xedde0d90);
-	if(!ret){
+	if(ret<=0){
 		printf("error ddd read:%d\n",ret);
 		return;
 	}
@@ -2581,7 +2581,8 @@ done_config_file:
 
 	use_preset_menu = 0;	/* Disable the preset menu.  */
 
-	pxe_restart_config = 1;	/* pxe_detect will use configfile to run menu */
+	//@MOD
+	pxe_restart_config = 0;	/* pxe_detect will use configfile to run menu */
 
     /* go ahead and make sure the terminal is setup */
     if (current_term->startup)
