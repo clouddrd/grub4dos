@@ -2164,6 +2164,13 @@ restart_config:
 	/* This is necessary, because the menu must be overrided.  */
 	reset ();
 	//cmdline = (char *) CMDLINE_BUF;
+
+
+	//@RZ ADD
+	if(rz_grub_menu_config)  {
+		rz_read_default_menu();
+	}
+
 	  
 	putchar_hooked = (unsigned char*)1;/*stop displaying on screen*/
 
@@ -2481,7 +2488,9 @@ extern int graphicsmode_func (char *, int);
 		if (debug_boot) {
 		  grub_printf("\r%s\n", cur_entry);
 		}
-		//DEBUG_SLEEP  /* Only uncomment if you want to pause before processing every menu.lst line */
+		//@RZ MOD
+		DEBUG_SLEEP  /* Only uncomment if you want to pause before processing every menu.lst line */
+
 		/* Copy the first string in CUR_ENTRY to HEAP.  */
 		old_entry = cur_entry;
 		while (*cur_entry++);
@@ -2513,6 +2522,9 @@ extern int graphicsmode_func (char *, int);
 		{
 		  unsigned long pxe_restart_config_bak = pxe_restart_config;
 		  pxe_restart_config = 1;	/* for configfile to work with gfxmenu. */
+
+		  //@RZ ADD
+		  printf("graphics");
 
 		  run_graphics_menu((char *)titles, cur_entry, /*num_entries,*/ config_entries + config_len, default_entry);
 
@@ -2587,8 +2599,8 @@ done_config_file:
 		rz_read_default_menu();
 		if(rz_grub_menu_index>=0){
 			printf("goto entry\n");
-			cur_entry=get_entry(menu_cfg,1);
-			//entryno=0;
+			cur_entry=get_entry(menu_cfg,rz_grub_menu_index);
+			DEBUG_SLEEP
 		}
 	}
 
