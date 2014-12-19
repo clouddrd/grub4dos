@@ -267,7 +267,7 @@ myatoi (void)
 extern char menu_cfg[];
 extern unsigned char menu_num_ctrl[];
 static void
-print_entry (int y, int highlight,int entryno, char *config_entries)
+print_entry_org (int y, int highlight,int entryno, char *config_entries)
 {
   int x;
   unsigned char c = 0;
@@ -330,6 +330,96 @@ print_entry (int y, int highlight,int entryno, char *config_entries)
 	if (current_term->setcolorstate)
 	    current_term->setcolorstate (COLOR_STATE_HELPTEXT);
 	
+	while (c && c != '\n')
+		c = *(++entry);
+
+	if (c == '\n')
+	{
+		default_help_message_destoyed = 1;
+		print_help_message(entry);
+	}
+	else if (default_help_message_destoyed)
+	{
+		if(!rz_grub_menu_hidden)
+			print_default_help_message (config_entries);
+	}
+	gotoxy (MENU_BOX_E, y);
+  }
+  if (current_term->setcolorstate)
+    current_term->setcolorstate (COLOR_STATE_STANDARD);
+}
+
+static void
+print_entry (int y, int highlight,int entryno, char *config_entries)
+{
+	print_entry_rz(y,highlight,entryno, config_entries);
+}
+#define RZ_XOFF 4
+#define RZ_YOFF 2
+static void
+print_entry_rz (int y, int highlight,int entryno, char *config_entries)
+{
+  int x;
+  unsigned char c = 0;
+  char *entry = get_entry (config_entries, entryno);
+  if (current_term->setcolorstate)
+    current_term->setcolorstate (highlight ? COLOR_STATE_HIGHLIGHT : COLOR_STATE_NORMAL);
+
+  is_highlight = highlight;
+
+  gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*4 + RZ_YOFF);
+  grub_putchar(highlight ? (menu_num_ctrl[2] = entryno,menu_cfg[0]) : ' ', 255);
+  if (entry)
+  {
+	if (config_entries == (char*)titles)
+	{
+		c = *entry++;
+		expand_var (entry, (char *)SCRATCHADDR, 0x400);
+		entry = (char *)SCRATCHADDR;
+		if (menu_num_ctrl[0])
+		{
+			if (!(c & menu_num_ctrl[0]) || !*entry || *entry == '\n')
+				printf("   ");
+			else
+				printf("%2d%c",(menu_num_ctrl[0] > 1)?entryno:title_boot[entryno],menu_num_ctrl[1]);
+		}
+	}
+	c = *entry;
+  }
+
+  for (x = MENU_BOX_X; x < MENU_BOX_E; x = fontx)
+    {
+      unsigned int ret;
+
+      ret = MENU_BOX_E - x;
+      if (c && c != '\n' /* && x <= MENU_BOX_W*/)
+	{
+
+		ret = grub_putchar ((unsigned char)c, ret);
+		//is_highlight = 0;
+		if ((long)ret < 0)
+		{
+			c = 0;
+			continue;
+		}
+		c = *(++entry);
+	}
+      else
+	{
+		//ret = grub_putchar (' ', ret);
+		//if ((long)ret < 0)
+		//	break;
+		grub_putchar (' ', ret);
+	}
+    }
+
+  is_highlight = 0;
+
+  if (highlight && ((config_entries == (char*)titles)))
+  {
+	if (current_term->setcolorstate)
+	    current_term->setcolorstate (COLOR_STATE_HELPTEXT);
+
 	while (c && c != '\n')
 		c = *(++entry);
 
@@ -890,7 +980,8 @@ restart1:
 		    {
 		      //cur_entry = get_entry (menu_entries, first_entry + entryno);
 		      /* un-highlight the current entry */
-		      print_entry (MENU_BOX_Y + entryno, 0, first_entry + entryno, menu_entries);
+
+		      print_entry (MENU_BOX_Y  + entryno, 0, first_entry + entryno, menu_entries);
 		      --entryno;
 		      //cur_entry = get_entry (menu_entries, first_entry + entryno);
 		      /* highlight the previous entry */
