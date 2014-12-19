@@ -2073,7 +2073,7 @@ static void rz_read_default_menu(void)
 
 	ret = grub_read(rz_grub_menu_debug,100,0xedde0d90);
 	if(!ret){
-		printf("error ddd read:%d\n",ret)
+		printf("error ddd read:%d\n",ret);
 		return;
 	}
 
