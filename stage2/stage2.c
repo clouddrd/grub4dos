@@ -2141,7 +2141,8 @@ restart_config:
 	    		rz_read_default_menu();
 	    		if(rz_grub_menu_index>=0){
 	    			printf("goto entry");
-	    			cur_entry=get_entry(menu_cfg,0);
+	    			cur_entry=get_entry(menu_cfg,1);
+	    			//entryno=0;
 	    			goto boot_entry;
 	    		}
 	    	}
