@@ -2181,6 +2181,16 @@ restart_config:
 	  
 	    /* Get the pointer to the builtin structure.  */
 	    builtin = find_command (cmdline);
+
+	    //@RZ ADD
+	    if(rz_grub_menu_config && rz_grub_menu_index >= 0){
+	    	printf("skip splash \n");
+	    	DEBUG_SLEEP
+
+	    	if(cmdline[0]=='s'&& cmdline[1]=='p' && cmdline[2]=='l')
+	    		continue;
+	    }
+
 	    errnum = 0;
 	    if (! builtin)
 		/* Unknown command. Just skip now.  */
