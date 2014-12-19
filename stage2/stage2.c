@@ -2064,15 +2064,12 @@ static void rz_read_default_menu(void)
 {
 	int ret=0;
 	ret=grub_open("iboot.ini");
-	if(ret!=0)printf("open:%d\n",ret);
-	else printf("error open:%d\n",ret);
+	if(!ret)printf("open error:%d\n",ret);
+	printf("open:%d\n",ret);
 
-	ret = grub_read(rz_grub_menu_debug,10,0xedde0d90);
+	grub_read(rz_grub_menu_debug,10,0xedde0d90);
 	rz_grub_menu_debug[10]=0;
 	printf("read:%d,%s\n",ret,rz_grub_menu_debug);
-
-	if(ret>0)printf("read:%d,%s\n",ret,rz_grub_menu_debug);
-	else printf("error read:%d\n",ret);
 
 	grub_close();
 	printf("close\n");
