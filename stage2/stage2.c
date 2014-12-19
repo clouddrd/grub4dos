@@ -2072,6 +2072,7 @@ static void rz_read_default_menu(void)
 	rz_grub_menu_debug[10]=0;
 	printf("read:%d,%c%c\n",ret,rz_grub_menu_debug[0],rz_grub_menu_debug[1]);
  //""
+	//""
 	if(ret>0)printf("read:%d,%s\n",ret,rz_grub_menu_debug);
 	else printf("error ddd read:%d\n",ret);
 
