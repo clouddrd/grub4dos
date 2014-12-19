@@ -2077,6 +2077,11 @@ static void rz_read_default_menu(void)
 		return;
 	}
 
+	if(ret<8) return;
+
+	rz_grub_menu_index=0;
+	grub_timeout=0;
+
 	rz_grub_menu_debug[ret]=0;
 	printf("read:%d,%s\n",ret,rz_grub_menu_debug);
 
@@ -2125,33 +2130,40 @@ restart_config:
 	{
 	    int is_opened;
 
-	    if(rz_grub_menu_config)
-	    	rz_read_default_menu();
+
 	    is_preset = is_opened = 0;
 	    /* Try command-line menu first if it is specified. */
 	    //if (preset_menu == (char *)0x0800/*&& ! *config_file*/)
 	    if (use_preset_menu)
 	    {
-		is_opened = is_preset = open_preset_menu ();
+	    	is_opened = is_preset = open_preset_menu ();
+	    	if(rz_grub_menu_config)  {
+	    		rz_read_default_menu();
+	    		if(rz_grub_menu_index>=0){
+	    			printf("goto entry");
+	    			cur_entry=get_entry(menu_cfg,0);
+	    			goto boot_entry;
+	    		}
+	    	}
 	    }
 	    if (! is_opened)
 	    {
-		/* Try config_file */
-		if (*config_file)
-		{
-			is_opened = (configfile_opened || grub_open (config_file));
-		}
+			/* Try config_file */
+			if (*config_file)
+			{
+				is_opened = (configfile_opened || grub_open (config_file));
+			}
 	    }
 	    errnum = 0;
 	    configfile_opened = 0;
 	    if (! is_opened)
 	    {
-		if (pxe_restart_config)
-			goto original_config;
+			if (pxe_restart_config)
+				goto original_config;
 
-		/* Try the preset menu. This will succeed at most once,
-		 * because the preset menu will be disabled(see below).  */
-		is_opened = is_preset = open_preset_menu ();
+			/* Try the preset menu. This will succeed at most once,
+			 * because the preset menu will be disabled(see below).  */
+			is_opened = is_preset = open_preset_menu ();
 	    }
 
 	    if (! is_opened)
@@ -2434,13 +2446,13 @@ extern int graphicsmode_func (char *, int);
 #endif
 	    if (is_preset)
 	    {
-		if (preset_menu == (const char *)0x800)
-		    printf ("\rProcessing the preset-menu ...\n");
-		else
-		    printf ("\rProcessing the LZMA preset-menu ...\n");
+			if (preset_menu == (const char *)0x800)
+				printf ("\rProcessing the preset-menu ...\n");
+			else
+				printf ("\rProcessing the LZMA preset-menu ...\n");
 	    }
 	    else
-		printf ("\rProcessing menu file %s ...\n", config_file);
+	    	printf ("\rProcessing menu file %s ...\n", config_file);
 	    DEBUG_SLEEP
 	}
 
@@ -2548,13 +2560,13 @@ original_config:
 
 	    for (i = 0; i < MAX_FALLBACK_ENTRIES; i++)
 	    {
-		if (fallback_entries[i] < 0)
-		    break;
-		if (fallback_entries[i] >= num_entries)
-		{
-		    grub_memmove (fallback_entries + i, fallback_entries + i + 1, ((MAX_FALLBACK_ENTRIES - i - 1) * sizeof (int)));
-		    i--;
-		}
+			if (fallback_entries[i] < 0)
+				break;
+			if (fallback_entries[i] >= num_entries)
+			{
+				grub_memmove (fallback_entries + i, fallback_entries + i + 1, ((MAX_FALLBACK_ENTRIES - i - 1) * sizeof (int)));
+				i--;
+			}
 	    }
 
 	    if (fallback_entries[0] < 0)
@@ -2567,10 +2579,10 @@ original_config:
 	{
 	    if (fallback_entryno >= 0)
 	    {
-		default_entry = fallback_entries[0];
-		fallback_entryno++;
-		if (fallback_entryno >= MAX_FALLBACK_ENTRIES || fallback_entries[fallback_entryno] < 0)
-		    fallback_entryno = -1;
+			default_entry = fallback_entries[0];
+			fallback_entryno++;
+			if (fallback_entryno >= MAX_FALLBACK_ENTRIES || fallback_entries[fallback_entryno] < 0)
+				fallback_entryno = -1;
 	    }
 	    else
 		default_entry = 0;
@@ -2598,9 +2610,9 @@ done_config_file:
     {
 	/* Run menu interface.  */
 	/* cur_entry point to the first menu item command. */
-	if (hotkey_func)
-		hotkey_func(0,0);
-	run_menu ((char *)titles, cur_entry, /*num_entries,*/ config_entries + config_len, default_entry);
+    	if (hotkey_func)
+    		hotkey_func(0,0);
+		run_menu ((char *)titles, cur_entry, /*num_entries,*/ config_entries + config_len, default_entry);
     }
     goto restart2;
 }
