@@ -2076,17 +2076,16 @@ static void rz_read_default_menu(void)
 		printf("error ddd read:%d\n",ret);
 		return;
 	}
-
-	if(ret<8) return;
-
-	rz_grub_menu_index=0;
-	grub_timeout=0;
+	grub_close();
 
 	rz_grub_menu_debug[ret]=0;
 	printf("read:%d,%s\n",ret,rz_grub_menu_debug);
+	if(ret<=8) return;
+	if(rz_grub_menu_debug[8]=='a') rz_grub_menu_index=0;
+	else if(rz_grub_menu_debug[8]=='m') rz_grub_menu_index=1;
 
-	grub_close();
-	printf("close\n");
+	grub_timeout=0;
+
 }
 
 
