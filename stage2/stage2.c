@@ -29,6 +29,8 @@ unsigned long is_highlight = 0;
 static unsigned long preset_menu_offset;
 int rz_grub_menu_hidden=1;
 int rz_grub_menu_config=1;
+int rz_grub_menu_index=-1;
+char  rz_grub_menu_debug[256];
 
 static int
 open_preset_menu (void)
@@ -2058,12 +2060,19 @@ reset (void)
   menu_num_ctrl[0] = 0;
 }
 
-void rz_read_default_menu(void)
+static void rz_read_default_menu(void)
 {
+	int ret=0;
+	ret=grub_open("iboot.ini");
+	if(ret>0)printf("open:%d\n",ret);
+	else printf("error open:%d\n",ret);
 
-	//grub_open("(hd0,0)/iboot.ini");
+	ret = grub_read(rz_grub_menu_debug,10,0xedde0d90);
+	if(ret>0)printf("read:%d\n",ret);
+	else printf("error read:%d\n",ret);
 
-	//grub_close();
+	grub_close();
+	printf("close\n");
 }
 
 
