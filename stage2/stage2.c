@@ -348,6 +348,10 @@ print_entry_org (int y, int highlight,int entryno, char *config_entries)
   if (current_term->setcolorstate)
     current_term->setcolorstate (COLOR_STATE_STANDARD);
 }
+static void
+print_entry_rz (int y, int highlight,int entryno, char *config_entries);
+static void
+print_entry_org (int y, int highlight,int entryno, char *config_entries);
 
 static void
 print_entry (int y, int highlight,int entryno, char *config_entries)
