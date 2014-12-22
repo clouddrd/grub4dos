@@ -363,18 +363,30 @@ print_entry (int y, int highlight,int entryno, char *config_entries)
 static void
 print_entry_rz (int y, int highlight,int entryno, char *config_entries)
 {
-  int x;
+  int x,i;
   unsigned char c = 0;
   char *entry = get_entry (config_entries, entryno);
   if (current_term->setcolorstate)
     current_term->setcolorstate (highlight ? COLOR_STATE_HIGHLIGHT : COLOR_STATE_NORMAL);
 
-  is_highlight = highlight;
+  //is_highlight = highlight;
+	
 
-  gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*4 + RZ_YOFF);
-  grub_putchar(highlight ? (menu_num_ctrl[2] = entryno,menu_cfg[0]) : ' ', 255);
+  if(entry) {
+    gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*3 + RZ_YOFF );
+    grub_putchar (DISP_UL, 255);
+    for (i = 0; i < MENU_BOX_W + 1 - RZ_XOFF*2; i++) grub_putchar (DISP_HORIZ, 255);
+   grub_putchar (DISP_UR, 255); 
+  }
+
+
+
+  //grub_putchar(highlight ? (menu_num_ctrl[2] = entryno,menu_cfg[0]) : ' ', 255);
   if (entry)
   {
+     gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*3 + RZ_YOFF + 1);
+        grub_putchar (DISP_VERT, 255);
+
 	if (config_entries == (char*)titles)
 	{
 		c = *entry++;
@@ -389,9 +401,10 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
 		}
 	}
 	c = *entry;
+
   }
 
-  for (x = MENU_BOX_X; x < MENU_BOX_E; x = fontx)
+  for (x = MENU_BOX_X; x < MENU_BOX_E - RZ_XOFF ; x = fontx)
     {
       unsigned int ret;
 
@@ -399,7 +412,8 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
       if (c && c != '\n' /* && x <= MENU_BOX_W*/)
 	{
 
-		ret = grub_putchar ((unsigned char)c, ret);
+		//ret = grub_putchar ((unsigned char)c, ret);
+		ret = grub_putchar (' ', ret);
 		//is_highlight = 0;
 		if ((long)ret < 0)
 		{
@@ -417,28 +431,18 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
 	}
     }
 
-  is_highlight = 0;
 
-  if (highlight && ((config_entries == (char*)titles)))
-  {
-	if (current_term->setcolorstate)
-	    current_term->setcolorstate (COLOR_STATE_HELPTEXT);
+  if(entry) {
+    grub_putchar (' ', 255);
+    grub_putchar (DISP_VERT, 255);
 
-	while (c && c != '\n')
-		c = *(++entry);
-
-	if (c == '\n')
-	{
-		default_help_message_destoyed = 1;
-		print_help_message(entry);
-	}
-	else if (default_help_message_destoyed)
-	{
-		if(!rz_grub_menu_hidden)
-			print_default_help_message (config_entries);
-	}
-	gotoxy (MENU_BOX_E, y);
+    gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*3 + RZ_YOFF + 2 );
+    grub_putchar (DISP_LL, 255);
+    for (i = 0; i < MENU_BOX_W + 1-RZ_XOFF*2; i++) grub_putchar (DISP_HORIZ, 255);
+   grub_putchar (DISP_LR, 255); 
   }
+
+
   if (current_term->setcolorstate)
     current_term->setcolorstate (COLOR_STATE_STANDARD);
 }
