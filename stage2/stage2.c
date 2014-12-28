@@ -372,6 +372,7 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
   //is_highlight = highlight;
 	
 
+<<<<<<< Upstream, based on origin/master
   if(entry) {
     gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*3 + RZ_YOFF );
     grub_putchar (DISP_UL, 255);
@@ -382,6 +383,10 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
 
 
   //grub_putchar(highlight ? (menu_num_ctrl[2] = entryno,menu_cfg[0]) : ' ', 255);
+=======
+  gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y + RZ_YOFF);
+  grub_putchar(highlight ? (menu_num_ctrl[2] = entryno,menu_cfg[0]) : ' ', 255);
+>>>>>>> 90d571e ch
   if (entry)
   {
      gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*3 + RZ_YOFF + 1);
@@ -427,7 +432,9 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
 		//ret = grub_putchar (' ', ret);
 		//if ((long)ret < 0)
 		//	break;
-		grub_putchar (' ', ret);
+
+
+    	  grub_putchar (' ', ret);
 	}
     }
 
