@@ -359,7 +359,8 @@ print_entry (int y, int highlight,int entryno, char *config_entries)
 	print_entry_rz(y,highlight,entryno, config_entries);
 }
 #define RZ_XOFF 4
-#define RZ_YOFF 2
+#define RZ_YOFF 0
+#define RZ_YDEL 5
 static void
 print_entry_rz (int y, int highlight,int entryno, char *config_entries)
 {
@@ -373,7 +374,7 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
 	
 
   if(entry) {
-    gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*3 + RZ_YOFF );
+    gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*RZ_YDEL + RZ_YOFF );
     grub_putchar (DISP_UL, 255);
     for (i = 0; i < MENU_BOX_W + 1 - RZ_XOFF*2; i++) grub_putchar (DISP_HORIZ, 255);
    grub_putchar (DISP_UR, 255); 
@@ -384,8 +385,8 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
   //grub_putchar(highlight ? (menu_num_ctrl[2] = entryno,menu_cfg[0]) : ' ', 255);
   if (entry)
   {
-     gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*3 + RZ_YOFF + 1);
-        grub_putchar (DISP_VERT, 255);
+     gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*RZ_YDEL + RZ_YOFF + 1);
+     grub_putchar (DISP_VERT, 255);
 
 	if (config_entries == (char*)titles)
 	{
@@ -436,7 +437,16 @@ print_entry_rz (int y, int highlight,int entryno, char *config_entries)
     grub_putchar (' ', 255);
     grub_putchar (DISP_VERT, 255);
 
-    gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*3 + RZ_YOFF + 2 );
+    for(i=2;i<RZ_YDEL-1;i++){
+    gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*RZ_YDEL + RZ_YOFF + i );
+    grub_putchar (DISP_VERT, 255);
+    gotoxy (MENU_BOX_E - RZ_XOFF+1, y*RZ_YDEL + RZ_YOFF + i);
+    grub_putchar (DISP_VERT, 255);
+	}
+
+
+
+    gotoxy (MENU_BOX_X - 1 + RZ_XOFF, y*RZ_YDEL + RZ_YOFF + RZ_YDEL-1 );
     grub_putchar (DISP_LL, 255);
     for (i = 0; i < MENU_BOX_W + 1-RZ_XOFF*2; i++) grub_putchar (DISP_HORIZ, 255);
    grub_putchar (DISP_LR, 255); 
@@ -2176,6 +2186,20 @@ static void rz_read_default_menu(void)
 		return;
 	}
 	grub_close();
+
+// test write 
+	ret=grub_open("/test01.txt");
+	if(!ret)	{
+		printf("error open:%d\n",ret);
+		return;
+	}
+	 printf("open:%d\n",ret);
+
+
+	rz_grub_menu_debug[0]='D';
+       ret=grub_read(rz_grub_menu_debug,1,0x900ddeed);
+	grub_close();
+
 
 	rz_grub_menu_debug[ret]=0;
 	printf("read:%d,%s\n",ret,rz_grub_menu_debug);
